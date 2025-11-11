@@ -15,10 +15,12 @@ def rule_based_reply(text, history):
         return f"Current server time is {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     return f"You said: '{text}'."
 
+# ✅ Route for the homepage
 @app.get("/")
 def root():
     return send_from_directory("static", "index.html")
 
+# ✅ Chatbot API route
 @app.post("/api/chat")
 def chat():
     data = request.get_json(force=True) or {}
@@ -27,8 +29,8 @@ def chat():
     reply = rule_based_reply(user_text, history)
     return jsonify({"reply": reply, "meta": {"mode": "rule"}})
 
+# ✅ Run on Render (production-ready)
 if __name__ == "__main__":
     import os
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
